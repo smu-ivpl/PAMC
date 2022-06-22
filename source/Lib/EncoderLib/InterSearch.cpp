@@ -960,9 +960,8 @@ void InterSearch::predInterSearch(CodingUnit& cu, Partitioner& partitioner)
           }
         }
       }
-	  
+
 #if JVET_K0220_ENC_CTRL
-	  
       if (cu.Y().width > 8 && cu.Y().height > 8 && cu.partSize == SIZE_2Nx2N && cu.slice->getSPS()->getSpsNext().getUseAffine() 
 #if JVET_K0357_AMVR
         && cu.imv == 0
@@ -978,7 +977,6 @@ void InterSearch::predInterSearch(CodingUnit& cu, Partitioner& partitioner)
       {
         ::memcpy( cMvHevcTemp, cMvTemp, sizeof( cMvTemp ) );
       }
-	  
 #if JVET_K_AFFINE
 #if JVET_K0220_ENC_CTRL
       if ( cu.Y().width > 8 && cu.Y().height > 8 && cu.partSize == SIZE_2Nx2N && cu.slice->getSPS()->getSpsNext().getUseAffine() )
