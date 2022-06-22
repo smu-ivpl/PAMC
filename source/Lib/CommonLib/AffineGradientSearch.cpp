@@ -129,25 +129,37 @@ void AffineGradientSearch::xVerticalSobelFilter( Pel *const pPred, const int pre
   }
 }
 
-void AffineGradientSearch::xEqualCoeffComputer( Pel *pResidue, int residueStride, int **ppDerivate, int derivateBufStride, int64_t( *pEqualCoeff )[7], int width, int height, bool b6Param )
+void AffineGradientSearch::xEqualCoeffComputer( Pel *pResidue, int residueStride, int **ppDerivate, int derivateBufStride, int64_t( *pEqualCoeff )[9], int width, int height, int i468Param )
 {
-  int affineParamNum = b6Param ? 6 : 4;
+  int affineParamNum = 0;
+  if (i468Param == 0)
+  {
+	  affineParamNum = 4;
+  }
+  else if (i468Param == 1)
+  {
+	  affineParamNum = 6;
+  }
+  else if (i468Param == 2)
+  {
+	  affineParamNum = 8;
+  }
 
   for ( int j = 0; j != height; j++ )
   {
     for ( int k = 0; k != width; k++ )
     {
-      int iC[6];
+      int iC[8];
 
       int idx = j * derivateBufStride + k;
-      if ( !b6Param )
+      if (i468Param == 0)
       {
         iC[0] = ppDerivate[0][idx];
         iC[1] = k * ppDerivate[0][idx] + j * ppDerivate[1][idx];
         iC[2] = ppDerivate[1][idx];
         iC[3] = j * ppDerivate[0][idx] - k * ppDerivate[1][idx];
       }
-      else
+      else if (i468Param == 1)
       {
         iC[0] = ppDerivate[0][idx];
         iC[1] = k * ppDerivate[0][idx];
@@ -156,6 +168,17 @@ void AffineGradientSearch::xEqualCoeffComputer( Pel *pResidue, int residueStride
         iC[4] = j * ppDerivate[0][idx];
         iC[5] = j * ppDerivate[1][idx];
       }
+	  else
+	  {
+		iC[0] = ppDerivate[0][idx];
+		iC[1] = k * ppDerivate[0][idx];
+		iC[2] = ppDerivate[1][idx];
+		iC[3] = k * ppDerivate[1][idx];
+		iC[4] = j * ppDerivate[0][idx];
+		iC[5] = j * ppDerivate[1][idx];
+		iC[6] = k * ppDerivate[0][idx] + j * ppDerivate[0][idx];
+		iC[7] = k * ppDerivate[1][idx] + j * ppDerivate[1][idx];
+	  }
       for ( int col = 0; col < affineParamNum; col++ )
       {
         for ( int row = 0; row < affineParamNum; row++ )

@@ -338,11 +338,15 @@ void PredictionUnit::initData()
     mv[i]     .setZero();
     mvd[i]    .setZero();
 #if JVET_K_AFFINE
-    for( uint32_t j = 0; j < 3; j++ )
+    for( uint32_t j = 0; j < 4; j++ )
     {
       mvdAffi[i][j].setZero();
     }
 #endif
+  }
+  for (uint32_t i = 0; i < 2; i++)
+  {
+	  perspParam[i] = 0.0;
   }
 }
 
@@ -370,7 +374,7 @@ PredictionUnit& PredictionUnit::operator=(const InterPredictionData& predData)
     mvd[i]      = predData.mvd[i];
     refIdx[i]   = predData.refIdx[i];
 #if JVET_K_AFFINE
-    for( uint32_t j = 0; j < 3; j++ )
+    for( uint32_t j = 0; j < 4; j++ )
     {
       mvdAffi[i][j] = predData.mvdAffi[i][j];
     }
@@ -399,7 +403,7 @@ PredictionUnit& PredictionUnit::operator=( const PredictionUnit& other )
     mvd[i]      = other.mvd[i];
     refIdx[i]   = other.refIdx[i];
 #if JVET_K_AFFINE
-    for( uint32_t j = 0; j < 3; j++ )
+    for( uint32_t j = 0; j < 4; j++ )
     {
       mvdAffi[i][j] = other.mvdAffi[i][j];
     }

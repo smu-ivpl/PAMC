@@ -817,7 +817,7 @@ bool EncAppCfg::parseCfg( int argc, char* argv[] )
   ("HighPrecMv",                                      m_highPrecisionMv,                               false, "High precision motion vectors for temporal merging (0:off, 1:on)  [default: off]")
   ("Affine",                                          m_Affine,                                        false, "Enable affine prediction (0:off, 1:on)  [default: off]")
 #if JVET_K0337_AFFINE_6PARA
-  ( "AffineType",                                     m_AffineType,                                     true,  "Enable affine type prediction (0:off, 1:on)  [default: on]" )
+  ( "AffineType",                                     m_AffineType,                                     2,  "Enable affine type prediction (0:off, 1:on)  [default: on] / [modify]  0:4param, 1:6param, 2:8param" )
 #endif
 #endif
   ("DisableMotCompression",                           m_DisableMotionCompression,                       false, "Disable motion data compression for all modes")

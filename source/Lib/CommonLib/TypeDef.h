@@ -100,6 +100,10 @@
 #if JVET_K0337_AFFINE_6PARA
 #define JVET_K0185_AFFINE_6PARA_ENC                       1 // CE4.1.5 Affine 6-para encoder
 #endif
+#define JVET_YJC_PERSP_8PARA                              1 // [YJC] Perspective 8-para encoder
+#if JVET_YJC_PERSP_8PARA
+#define JVET_YJC_PERSP_8PARA_ENC                          1 // [YJC] Perspective 8-para encoder
+#endif
 #endif
 
 #define JVET_K0357_AMVR                                   1 // Adaptive motion vector resolution separated from JEM_TOOLS macro
@@ -604,7 +608,7 @@ enum MvpDir
   MD_ABOVE,             ///< MVP of above block
   MD_ABOVE_RIGHT,       ///< MVP of above right block
   MD_BELOW_LEFT,        ///< MVP of below left block
-  MD_ABOVE_LEFT         ///< MVP of above left block
+  MD_ABOVE_LEFT,        ///< MVP of above left block
 };
 
 enum StoredResidualType

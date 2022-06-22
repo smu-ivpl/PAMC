@@ -196,6 +196,8 @@ public:
 
   void predInterSearch(CodingUnit& cu, Partitioner& partitioner );
 
+  void predInterSearchPersp(CodingUnit& cu, Partitioner& partitioner, Mv bestCSMv[2][4], int bestCSRefIdx[2]);
+
   /// set ME search range
   void setAdaptiveSearchRange       ( int iDir, int iRefIdx, int iSearchRange) { CHECK(iDir >= MAX_NUM_REF_LIST_ADAPT_SR || iRefIdx>=int(MAX_IDX_ADAPT_SR), "Invalid index"); m_aaiAdaptSR[iDir][iRefIdx] = iSearchRange; }
 
@@ -339,7 +341,7 @@ protected:
                                     bool                  bFastSkipBi
 #endif
 #if JVET_K0185_AFFINE_6PARA_ENC
-                                  , Mv                    mvAffine4Para[2][33][3]
+                                  , Mv                    mvAffine4Para[2][33][4]
                                   , int                   refIdx4Para[2]
 #endif
                                   );
@@ -347,9 +349,9 @@ protected:
   void xAffineMotionEstimation    ( PredictionUnit& pu,
                                     PelUnitBuf&     origBuf,
                                     RefPicList      eRefPicList,
-                                    Mv              acMvPred[3],
+                                    Mv              acMvPred[4],
                                     int             iRefIdxPred,
-                                    Mv              acMv[3],
+                                    Mv              acMv[4],
                                     uint32_t&           ruiBits,
                                     Distortion&     ruiCost,
                                     bool            bBi = false
@@ -360,14 +362,14 @@ protected:
                                     PelUnitBuf&      origBuf,
                                     RefPicList       eRefPicList,
                                     int              iRefIdx,
-                                    Mv               acMvPred[3],
+                                    Mv               acMvPred[4],
                                     Distortion*      puiDistBiP
                                   );
 
-  Distortion xGetAffineTemplateCost( PredictionUnit& pu, PelUnitBuf& origBuf, PelUnitBuf& predBuf, Mv acMvCand[3], int iMVPIdx, int iMVPNum, RefPicList eRefPicList, int iRefIdx );
+  Distortion xGetAffineTemplateCost( PredictionUnit& pu, PelUnitBuf& origBuf, PelUnitBuf& predBuf, Mv acMvCand[4], int iMVPIdx, int iMVPNum, RefPicList eRefPicList, int iRefIdx );
 
   void xCopyAffineAMVPInfo        ( AffineAMVPInfo& src, AffineAMVPInfo& dst );
-  void xCheckBestAffineMVP        ( PredictionUnit &pu, AffineAMVPInfo &affineAMVPInfo, RefPicList eRefPicList, Mv acMv[3], Mv acMvPred[3], int& riMVPIdx, uint32_t& ruiBits, Distortion& ruiCost );
+  void xCheckBestAffineMVP        ( PredictionUnit &pu, AffineAMVPInfo &affineAMVPInfo, RefPicList eRefPicList, Mv acMv[4], Mv acMvPred[4], int& riMVPIdx, uint32_t& ruiBits, Distortion& ruiCost );
 #endif
   void xExtDIFUpSamplingH         ( CPelBuf* pcPattern );
   void xExtDIFUpSamplingQ         ( CPelBuf* pcPatternKey, Mv halfPelRef );

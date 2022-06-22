@@ -362,7 +362,9 @@ struct InterPredictionData
   int16_t     refIdx  [NUM_REF_PIC_LIST_01];
   MergeType mergeType;
 #if JVET_K_AFFINE
-  Mv        mvdAffi [NUM_REF_PIC_LIST_01][3];
+  Mv        mvdAffi [NUM_REF_PIC_LIST_01][4];
+
+  double perspParam[2];
 #endif
 };
 

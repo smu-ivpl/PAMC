@@ -409,7 +409,7 @@ void DecCu::xDeriveCUMV( CodingUnit &cu )
         if( pu.cu->affine )
         {
           pu.mergeIdx = 0;
-          MvField       affineMvField[2][3];
+          MvField       affineMvField[2][4];
           unsigned char interDirNeighbours;
           int           numValidMergeCand;
           PU::getAffineMergeCand( pu, affineMvField, interDirNeighbours, numValidMergeCand );
@@ -514,8 +514,9 @@ void DecCu::xDeriveCUMV( CodingUnit &cu )
 
 #if JVET_K_AFFINE_BUG_FIXES
               Mv mvLB;
+			  Mv mvRB;
 #if JVET_K0337_AFFINE_6PARA
-              if ( cu.affineType == AFFINEMODEL_6PARAM )
+              if ( cu.affineType == AFFINEMODEL_6PARAM || cu.affineType == AFFINEMODEL_8PARAM )
               {
                 mvLB = affineAMVPInfo.mvCandLB[mvp_idx] + pu.mvdAffi[eRefList][2];
 #if JVET_K0337_AFFINE_MVD_PREDICTION
@@ -523,6 +524,16 @@ void DecCu::xDeriveCUMV( CodingUnit &cu )
 #endif
                 CHECK( !mvLB.highPrec, "unexpected lp mv" );
               }
+#endif
+#if JVET_YJC_PERSP_8PARA
+			  if (cu.affineType == AFFINEMODEL_8PARAM)
+			  {
+				  mvRB = affineAMVPInfo.mvCandRB[mvp_idx] + pu.mvdAffi[eRefList][3];
+#if JVET_K0337_AFFINE_MVD_PREDICTION
+				  mvRB += pu.mvdAffi[eRefList][0];
+#endif
+				  CHECK(!mvRB.highPrec, "unexpected lp mv");
+			  }
 #endif
 #else
               int iWidth = pu.Y().width;
@@ -536,7 +547,7 @@ void DecCu::xDeriveCUMV( CodingUnit &cu )
               clipMv(mvRT, pu.cu->lumaPos(), *pu.cs->sps);
               clipMv(mvLB, pu.cu->lumaPos(), *pu.cs->sps);
 #endif
-              PU::setAllAffineMv( pu, mvLT, mvRT, mvLB, eRefList );
+              PU::setAllAffineMv( pu, mvLT, mvRT, mvLB, mvRB, eRefList );
             }
           }
         }

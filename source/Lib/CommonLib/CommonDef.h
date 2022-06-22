@@ -114,6 +114,7 @@ typedef enum
 {
   AFFINEMODEL_4PARAM,
   AFFINEMODEL_6PARAM,
+  AFFINEMODEL_8PARAM,	// [Perspective ME] Perspective Model 8Param
   AFFINE_MODEL_NUM
 } EAffineModel;
 #endif
@@ -327,6 +328,7 @@ static const int MAX_GR_ORDER_RESIDUAL =                           10;
 static const int AFFINE_MAX_NUM_V0 =                                3; ///< max number of motion candidates in top-left corner
 static const int AFFINE_MAX_NUM_V1 =                                2; ///< max number of motion candidates in top-right corner
 static const int AFFINE_MAX_NUM_V2 =                                2; ///< max number of motion candidates in left-bottom corner
+static const int AFFINE_MAX_NUM_V3 =								1; ///< max number of motion candidates in right-bottom corner
 static const int AFFINE_MAX_NUM_COMB =                             12; ///< max number of combined motion candidates
 static const int AFFINE_MIN_BLOCK_SIZE =                            4; ///< Minimum affine MC block size
 #endif

@@ -823,7 +823,7 @@ void HLSyntaxReader::parseSPSNext( SPSNext& spsNext, const bool usePCM )
 #if JVET_K0337_AFFINE_6PARA
   if ( spsNext.getUseAffine() )
   {
-    READ_FLAG( symbol,  "affine_type_flag" );                       spsNext.setUseAffineType          ( symbol != 0 );
+	  READ_UVLC( symbol,  "affine_type_flag" );                       spsNext.setUseAffineType          ( symbol );
   }
 #endif
 #endif

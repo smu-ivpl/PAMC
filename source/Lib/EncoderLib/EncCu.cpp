@@ -317,6 +317,46 @@ void EncCu::compressCtu( CodingStructure& cs, const UnitArea& area, const unsign
 
   xCompressCU( tempCS, bestCS, *partitioner );
 
+  //print affine type
+  if (isLuma(partitioner->chType) && !cs.slice->isIntra())
+  {
+	  for (int i = 0; i < bestCS->cus.size(); i++)
+	  {
+		  /*
+		  Mv mvLT, mvRT, mvLB, mvRB;
+
+		  const Position posLT = bestCS->cus[i]->cs->getPU(partitioner->chType)->Y().topLeft();
+		  const Position posRT = bestCS->cus[i]->cs->getPU(partitioner->chType)->Y().topRight();
+		  const Position posLB = bestCS->cus[i]->cs->getPU(partitioner->chType)->Y().bottomLeft();
+		  const Position posRB = bestCS->cus[i]->cs->getPU(partitioner->chType)->Y().bottomRight();
+
+		  mvLT = bestCS->cus[i]->cs->getPU(partitioner->chType)->getMotionInfo(posLT).mv[0];
+		  mvRT = bestCS->cus[i]->cs->getPU(partitioner->chType)->getMotionInfo(posRT).mv[0];
+		  mvLB = bestCS->cus[i]->cs->getPU(partitioner->chType)->getMotionInfo(posLB).mv[0];
+		  mvRB = bestCS->cus[i]->cs->getPU(partitioner->chType)->getMotionInfo(posRB).mv[0];
+
+		  if (bestCS->cus[i]->affine == true && bestCS->cus[i]->affineType == AFFINEMODEL_6PARAM) {
+				printf("%d\t%d\t%d\t%d\t%d\t:\t(%d,%d)\t(%d,%d)\t(%d,%d)\n", bestCS->cus[i]->slice->getPOC(), bestCS->cus[i]->lx(), bestCS->cus[i]->ly(), bestCS->cus[i]->lwidth(), bestCS->cus[i]->lheight(),
+					mvLT.getHor(), mvLT.getVer(), mvRT.getHor(), mvRT.getVer(), mvLB.getHor(), mvLB.getVer());
+	      }
+		  */
+		  
+		  if (bestCS->cus[i]->affine == true && bestCS->cus[i]->affineType == AFFINEMODEL_8PARAM)
+		  {
+			  //printf("%d\t%d\t%d\t%d\t%d\n", bestCS->cus[i]->slice->getPOC(), bestCS->cus[i]->lx(), bestCS->cus[i]->ly(), bestCS->cus[i]->lwidth(), bestCS->cus[i]->lheight());
+		  }
+
+		  if (bestCS->cus[i]->affine == true)
+		  {
+			  printf("%d\t%d\t%d\t%d\t%d\n", bestCS->cus[i]->lx(), bestCS->cus[i]->ly(), bestCS->cus[i]->lwidth(), bestCS->cus[i]->lheight(), bestCS->cus[i]->affineType);
+		  }
+		  if (bestCS->cus[i]->affine == false)
+		  {
+			  //printf("%d\t%d\t%d\t%d\t%d\n", bestCS->cus[i]->lx(), bestCS->cus[i]->ly(), bestCS->cus[i]->lwidth(), bestCS->cus[i]->lheight(), 3);
+		  }
+
+	  }
+  }
 
   // all signals were already copied during compression if the CTU was split - at this point only the structures are copied to the top level CS
   const bool copyUnsplitCTUSignals = bestCS->cus.size() == 1 && KEEP_PRED_AND_RESI_SIGNALS;
@@ -608,7 +648,12 @@ void EncCu::xCompressCU( CodingStructure *&tempCS, CodingStructure *&bestCS, Par
       else
 #endif
       {
-        xCheckRDCostInter( tempCS, bestCS, partitioner, currTestMode );
+		  bool isPerspf = false;
+		  xCheckRDCostInter(tempCS, bestCS, partitioner, currTestMode, isPerspf);
+
+		  // 8 parameter perspective 를 위한 수행 부분
+		  bool isPerspt = true;
+		  xCheckRDCostInter(tempCS, bestCS, partitioner, currTestMode, isPerspt);
       }
 
     }
@@ -682,6 +727,23 @@ void EncCu::xCompressCU( CodingStructure *&tempCS, CodingStructure *&bestCS, Par
   CHECK( bestCS->cus[0]->partSize == NUMBER_OF_PART_SIZES      , "No possible encoding found" );
   CHECK( bestCS->cus[0]->predMode == NUMBER_OF_PREDICTION_MODES, "No possible encoding found" );
   CHECK( bestCS->cost             == MAX_DOUBLE                , "No possible encoding found" );
+  /*
+  if (bestCS->getCU(partitioner.chType)->affine == true && partitioner.chType == CHANNEL_TYPE_LUMA)
+  {
+	  if (bestCS->getCU(partitioner.chType)->affineType == AFFINEMODEL_4PARAM)
+	  {
+		  printf("%d\t%d\t%d\t%d\t%d\t%d\n", 1, 4, bestCS->area.lx(), bestCS->area.ly(), bestCS->area.lwidth(), bestCS->area.lheight());
+	  }
+	  else if (bestCS->getCU(partitioner.chType)->affineType == AFFINEMODEL_6PARAM)
+	  {
+		  printf("%d\t%d\t%d\t%d\t%d\t%d\n", 1, 6, bestCS->area.lx(), bestCS->area.ly(), bestCS->area.lwidth(), bestCS->area.lheight());
+	  }
+	  else if (bestCS->getCU(partitioner.chType)->affineType == AFFINEMODEL_8PARAM)
+	  {
+		  printf("%d\t%d\t%d\t%d\t%d\t%d\n", 1, 8, bestCS->area.lx(), bestCS->area.ly(), bestCS->area.lwidth(), bestCS->area.lheight());
+	  }
+  }
+  */
 }
 
 #if SHARP_LUMA_DELTA_QP
@@ -1717,7 +1779,7 @@ void EncCu::xCheckRDCostAffineMerge2Nx2N( CodingStructure *&tempCS, CodingStruct
     return;
   }
 
-  MvField       affineMvField[2][3];
+  MvField       affineMvField[2][4];
   unsigned char interDirNeighbours;
   int           numValidMergeCand;
   bool          hasNoResidual = false;
@@ -1778,11 +1840,28 @@ void EncCu::xCheckRDCostAffineMerge2Nx2N( CodingStructure *&tempCS, CodingStruct
 }
 #endif
 
-void EncCu::xCheckRDCostInter( CodingStructure *&tempCS, CodingStructure *&bestCS, Partitioner &partitioner, const EncTestMode& encTestMode )
+void EncCu::xCheckRDCostInter( CodingStructure *&tempCS, CodingStructure *&bestCS, Partitioner &partitioner, const EncTestMode& encTestMode, bool& isPersp )
 {
   tempCS->initStructData( encTestMode.qp, encTestMode.lossless );
 
   CodingUnit &cu      = tempCS->addCU( tempCS->area, partitioner.chType );
+
+  CodingUnit &Bestcu = *bestCS->getCU(partitioner.chType);
+  auto &Bestpu = *Bestcu.firstPU;
+
+  Mv bestCSMv[2][4];
+  int bestCSRefIdx[2] = { -1, -1 };
+  const CMotionBuf &Bestmb = Bestpu.getMotionBuf();
+
+  for (int refList = 0; refList < 2; refList++)
+  {
+	  bestCSMv[refList][0] = Bestmb.at(0, 0).mv[refList];
+	  bestCSMv[refList][1] = Bestmb.at(Bestmb.width - 1, 0).mv[refList];
+	  bestCSMv[refList][2] = Bestmb.at(0, Bestmb.height - 1).mv[refList];
+	  bestCSMv[refList][3] = Bestmb.at(Bestmb.width - 1, Bestmb.height - 1).mv[refList];
+  }
+  bestCSRefIdx[0] = Bestpu.refIdx[0];
+  bestCSRefIdx[1] = Bestpu.refIdx[1];
 
   partitioner.setCUData( cu );
   cu.slice            = tempCS->slice;
@@ -1792,13 +1871,27 @@ void EncCu::xCheckRDCostInter( CodingStructure *&tempCS, CodingStructure *&bestC
   cu.skip             = false;
   cu.partSize         = encTestMode.partSize;
 //cu.affine
+// for perspective
+  if (isPersp == true)
+  {
+	  cu.affine = true;
+	  cu.affineType = AFFINEMODEL_8PARAM;
+  }
   cu.predMode         = MODE_INTER;
   cu.transQuantBypass = encTestMode.lossless;
   cu.chromaQpAdj      = cu.transQuantBypass ? 0 : m_cuChromaQpOffsetIdxPlus1;
   cu.qp               = encTestMode.qp;
   CU::addPUs( cu );
 
-  m_pcInterSearch->predInterSearch( cu, partitioner );
+  // 8 Parameter perspective를 위한 수행 부분
+  if (cu.affine == true && cu.affineType == AFFINEMODEL_8PARAM)
+  {
+	  m_pcInterSearch->predInterSearchPersp(cu, partitioner, bestCSMv, bestCSRefIdx);
+  }
+  else
+  {
+	  m_pcInterSearch->predInterSearch(cu, partitioner);
+  }
 
 #if JVET_K0357_AMVR
   const unsigned wIdx = gp_sizeIdxInfo->idxFrom( tempCS->area.lwidth () );

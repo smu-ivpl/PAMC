@@ -563,7 +563,7 @@ void HLSWriter::codeSPSNext( const SPSNext& spsNext, const bool usePCM )
 #if JVET_K0337_AFFINE_6PARA
   if ( spsNext.getUseAffine() )
   {
-    WRITE_FLAG( spsNext.getUseAffineType() ? 1 : 0,                                             "affine_type_flag" );
+	  WRITE_UVLC( spsNext.getUseAffineType(),                                                   "affine_type_flag" );
   }
 #endif
 #endif

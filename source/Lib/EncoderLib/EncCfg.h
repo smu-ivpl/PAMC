@@ -201,7 +201,7 @@ protected:
 #if JVET_K_AFFINE
   bool      m_Affine;
 #if JVET_K0337_AFFINE_6PARA
-  bool      m_AffineType;
+  int       m_AffineType;
 #endif
 #endif
 #if JVET_K0346 || JVET_K_AFFINE
@@ -635,8 +635,8 @@ public:
   void      setAffine                       ( bool b )       { m_Affine = b; }
   bool      getAffine                       ()         const { return m_Affine; }
 #if JVET_K0337_AFFINE_6PARA
-  void      setAffineType( bool b )                          { m_AffineType = b; }
-  bool      getAffineType()                            const { return m_AffineType; }
+  void      setAffineType( int b )                          { m_AffineType = b; }
+  int       getAffineType()                            const { return m_AffineType; }
 #endif
 #endif
 #if JVET_K0346 || JVET_K_AFFINE

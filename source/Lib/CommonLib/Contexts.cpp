@@ -378,6 +378,7 @@ const CtxSet ContextSetCfg::AffineType = ContextSetCfg::addCtxSet
 ({
   { 92,  },
   { 77,  },
+  { 62,  }, // [YJC][PerspectiveME] 같은 간격으로 하긴 했으나, 설정 방법을 잘 모르겠음.
   { CNU, },
 });
 #endif

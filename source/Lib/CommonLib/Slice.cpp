@@ -1617,7 +1617,7 @@ SPSNext::SPSNext( SPS& sps )
 #if JVET_K_AFFINE
   , m_Affine                    ( false )
 #if JVET_K0337_AFFINE_6PARA
-  , m_AffineType                ( false )
+  , m_AffineType                ( 0 )
 #endif
 #endif
   , m_MTTEnabled                ( false )

@@ -825,7 +825,7 @@ private:
 #if JVET_K_AFFINE
   bool              m_Affine;
 #if JVET_K0337_AFFINE_6PARA
-  bool              m_AffineType;
+  int               m_AffineType;
 #endif
 #endif
   bool              m_MTTEnabled;                 //
@@ -887,8 +887,8 @@ public:
   void      setUseAffine          ( bool b )                                        { m_Affine = b; }
   bool      getUseAffine          ()                                      const     { return m_Affine; }
 #if JVET_K0337_AFFINE_6PARA
-  void      setUseAffineType      ( bool b )                                        { m_AffineType = b; }
-  bool      getUseAffineType      ()                                      const     { return m_AffineType; }
+  void      setUseAffineType      ( int b )                                        { m_AffineType = b; }
+  int       getUseAffineType      ()                                      const     { return m_AffineType; }
 #endif
 #endif
 #if JVET_K0072

@@ -210,7 +210,7 @@ protected:
 #if JVET_K_AFFINE
   bool      m_Affine;
 #if JVET_K0337_AFFINE_6PARA
-  bool      m_AffineType;
+  int       m_AffineType;
 #endif
 #endif
 #if JVET_K0346 || JVET_K_AFFINE
