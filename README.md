@@ -18,7 +18,7 @@
 
 #### Perspective Affine Motion Compensation (PAMC)
 <p align="center">
-  <img width="900" src="./images/fig8.PNG">
+  <img width="600" src="./images/fig8.PNG">
 </p>
 
 #### Experimental Results
@@ -41,14 +41,27 @@ The VTM software uses [cmake](http://www.cmake.org/) to create the needed build 
 
 2. Run following cmake commands
 
-    - Windows
+    - Windows (sample for Visual Studio 2015 64 Bit)
+      ```bash
+        cd build
+        cmake .. -G "Visual Studio 14 2015 Win64"
+      ```
     - Linux Release
+      ```bash
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release
+      ```
     - Linux Debug
+      ```bash
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Debug
+      ```
     - MACOSX Xcode
-
-----------------------------
-
-    
+      ```bash
+        cd build
+        cmake .. -G "Xcode"
+      ```
+ 
 ----------------------------
 ## Citation
     @article{choi2019design,
