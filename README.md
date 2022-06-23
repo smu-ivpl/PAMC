@@ -84,7 +84,7 @@ The VTM software uses [cmake](http://www.cmake.org/) to create the needed build 
 
   CABACWriter.cpp, EncCfg.h, EncCu.cpp, EncCu.h, InterSearch.cpp, InterSearch.h, VLCWriter.cpp
   
-  If you want to know more about the modified source codes, please refer to the [commit history](https://github.com/YounggjuuChoi/PAMC/commit/62c2f02b68cb86e522d85c13008dd134869380b7).
+If you want to know more about the modified source codes, please refer to the [commit history](https://github.com/YounggjuuChoi/PAMC/commit/62c2f02b68cb86e522d85c13008dd134869380b7).
   
 ----------------------------
 ## Citation
