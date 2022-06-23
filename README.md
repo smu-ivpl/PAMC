@@ -61,7 +61,31 @@ The VTM software uses [cmake](http://www.cmake.org/) to create the needed build 
         cd build
         cmake .. -G "Xcode"
       ```
- 
+----------------------------
+## Implementation of PAMC
+#### 27 changed files
+- source/App/EncoderApp
+  
+  EncAppCfg.cpp, EncAppCfg.h
+  
+- source/Lib/CommonLib
+
+  AffineGradientSearch.cpp, AffineGradientSearch.h, CommonDef.h, Contexts.cpp, InterPrediction.cpp, InterPrediction.h, MotionInfo.h, Slice.h, TypeDef.h, Unit.cpp, Unit.h, UnitTools.cpp, UnitTools.h
+  
+- source/Lib/CommonLib/x86
+
+  AffineGradientSearchX86.h
+  
+- source/Lib/DecoderLib
+
+  CABACReader.cpp, DecCu.cpp, VLCReader.cpp
+  
+- source/Lib/EncoderLib
+
+  CABACWriter.cpp, EncCfg.h, EncCu.cpp, EncCu.h, InterSearch.cpp, InterSearch.h, VLCWriter.cpp
+  
+If you want to know more about the modified source codes, please refer to the [commit history](https://github.com/YounggjuuChoi/PAMC/commit/62c2f02b68cb86e522d85c13008dd134869380b7).
+  
 ----------------------------
 ## Citation
     @article{choi2019design,
